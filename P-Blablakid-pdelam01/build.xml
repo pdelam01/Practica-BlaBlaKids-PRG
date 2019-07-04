@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+	<project name="Blablakid" basedir="." default="todo">
+	  <property name="src" value="src" />
+	  <property name="test" value="test" />
+	  <property name="lib" value="lib" />
+	  <property name="conf" value="etc/" />
+	  <property name="conftest" value="etc/logtes/" />
+	  <property name="lib2" value="lib/junit-4.12.jar" />
+	  <property name="log4j1" value="lib/log4j-api-2.11.2.jar" />
+	  <property name="log4j2" value="lib/log4j-core-2.11.2.jar" />
+	  <property name="classes" value="classes" />
+	  <property name="paquetes" value="es.unileon.prg1.blablakid" />
+	  <property name="titulo" value="Tests of Blablakid" />
+	  <property name="doc.dir" location="doc" />
+
+
+	  <target name="clean">
+	    <delete dir="${classes}" />
+	    <delete dir="${doc.dir}" />
+	  </target>
+
+
+	  <target name="init" depends="clean">
+	    <mkdir dir="${doc.dir}" />
+	    <mkdir dir="${classes}" />
+	  </target>
+
+
+	  <target name="compile" depends="init">
+	    <javac srcdir="${src}" destdir="${classes}" classpath="${lib2};${log4j1};${classes};${log4j2};${conf}" includeantruntime="false" />
+	    <echo message="Compilation...done" />
+	  </target>
+
+	  <target name="doc" depends="compile" description="generate documentation">
+	    <javadoc sourcepath="${src}" destdir="${doc.dir}" author="true" version="true" classpath="${lib2};${log4j1};${classes};${log4j2}" />
+	  </target>
+
+	  <target name="compileTests" depends="compile">
+	    <javac srcdir="${test}" destdir="${classes}" classpath="${lib2};${log4j1};${classes};${log4j2};${conftest}" includeantruntime="false" />
+	    <echo message="Test compilation...done" />
+	  </target>
+
+	  <target name="test" depends="compileTests">
+	    <junit printsummary="yes" haltonfailure="no">
+	      <classpath>
+	        <pathelement path="${classes}" />
+	        <pathelement path="${conftest}" />
+	        <pathelement path="${lib2}" />
+	        <pathelement path="${log4j1}" />
+	        <pathelement path="${log4j2}" />
+	      </classpath>
+	      <test name="es.unileon.prg1.blablakid.ActivitiesTest" haltonfailure="no">
+	      </test>
+	    </junit>
+	  </target>
+
+	  <target name="run" depends="test">
+	    <java classname="es.unileon.prg1.blablakid.MainBlablakid">
+	      <arg value="3" />
+	     
+	      <classpath>
+	        <pathelement path="${classes}" />
+	        <pathelement path="${conf}" />
+	        <pathelement path="${lib2}" />
+	        <pathelement path="${log4j1}" />
+	        <pathelement path="${log4j2}" />
+	      </classpath>
+	    </java>
+	  </target>
+	 
+	  <target name="todo" depends="clean,init,compile,doc,compileTests,test,run" />
+
+	</project>
